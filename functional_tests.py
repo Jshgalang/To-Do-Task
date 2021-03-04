@@ -2,9 +2,11 @@ import unittest
 from selenium import webdriver
 
 class MikeTest(unittest.TestCase):
+	@classmethod
 	def setUp(self):
 		self.browser = webdriver.Firefox()
 
+	@classmethod
 	def tearDown(self):
 		self.browser.quit()
 
