@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
 
+
 class MikeTest(unittest.TestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
