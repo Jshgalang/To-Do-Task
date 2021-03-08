@@ -17,12 +17,12 @@ class MikeTest(unittest.TestCase):
         header_text = self.browser.find_element_by_tag_name('h1').text # user types into the textbox
         self.assertIn('TO-DO', header_text)
         inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertEqual(inputbox.getAttribute('placeholder'),'Enter a to-do item:') 
+        self.assertEqual(inputbox.get_attribute('placeholder'),'Enter a to-do item:') 
         inputbox.send_keys('Mike will eat a meatball.') # enable the user to insert an entry
-        inputbox.send_keys(Keys.Enter)
+        inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         table = self.browser.find_element_by_id('id_list_table')
-        self.assertTrue(any(row.text == '1: Mike will eat a meatball' for row in rows))
+        self.assertTrue(any(row.text == '1: Mike will eat a meatball' for row in rows), 'New to-do item did not appear in the table')
         self.fail('Finish the test!')
 
 
