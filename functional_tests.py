@@ -13,7 +13,7 @@ class MikeTest(unittest.TestCase):
 
     def test_start_a_list_and_retrieve_it_later(self):
         self.browser.get('http://localhost:8000')
-        self.assertIn('To-Do', self.browser.title)
+        self.assertIn('TO-DO', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text # user types into the textbox
         self.assertIn('TO-DO', header_text)
         inputbox = self.browser.find_element_by_id('id_new_item')
