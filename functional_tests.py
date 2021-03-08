@@ -18,13 +18,14 @@ class MikeTest(unittest.TestCase):
 		header_text = self.browser.find_element_by_tag_name('h1').text
 		self.assertIn('To-Do', header_text)
 		self.browser.find_element_by_id('id_new_item')
-		self.assertEqual(inputbox.getAttribute('placaeholder'), 'Enter a To-Do item.')
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a To-Do item.')
 		inputbox.send_keys('Mike will eat a meatball.')
 		inputbox.send_keys(Keys.ENTER)
 		time.sleep(1)
 		table = self.browser.find_element_by_id('id_list_table')
 		rows = table.find_elements_by_tag_name('tr')
-		self.assertTrue(any(row.text == '1: Mike will eat a meatball' for row in rows))
+		self.assertTrue(any(row.text == '1: Mike will eat a meatball.' for row in rows), "New to-do item did not appear in table.")
 		self.fail('Finish the test!')
 
 	def test_addentry_and_retrievelater(self):  #  main func
