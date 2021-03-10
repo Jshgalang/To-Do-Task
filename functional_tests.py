@@ -8,8 +8,17 @@ class MikeTest(unittest.TestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
 
+
     def tearDown(self) -> None:
         self.browser.quit()
+
+
+    # helper method
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_test, [row.text for row in rows])
+
 
     def test_start_a_list_and_retrieve_it_later(self):
         self.browser.get('http://localhost:8000')
@@ -21,11 +30,13 @@ class MikeTest(unittest.TestCase):
         inputbox.send_keys('Mike will eat a meatball') # enable the user to insert an entry
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Mike will eat a meatball', [row.text for row in rows])
-        self.assertTrue(any(row.text == '1: Mike will eat a meatball' for row in rows),
-                        f"New to-do item do item did not appear in table. Contents were: \n{table.text}")
+
+
+        # page updates and reflects content of textbox after entering
+        self.check_for_row_in_list_table('1: Mike will eat a meatball')
+        self.check_for_row_in_list_table('2: Mike will digest the meatball')        
+
+        # site should generate a url storing the TO-DO list
         self.fail('Finish the test!')
 
 
@@ -36,9 +47,9 @@ class MikeTest(unittest.TestCase):
 
         
         
-        # page updates and reflects content of textbox after entering
+        
         # continuous entry
-        # site should generate a url storing the TO-DO list
+        #
         # user visits the URL to show the generated TO-DO list
 
 
