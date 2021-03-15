@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from lists.models import Item
 
+
 class HomePageTest(TestCase):
 	def test_root_url_resolution_to_home_page_view(self):
 		found = resolve("/")
