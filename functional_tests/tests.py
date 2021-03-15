@@ -3,6 +3,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 from django.test import LiveServerTestCase
+from selenium.common.exceptions import WebDriverException
+
+
+MAX_WAIT = 10 # catch random glitches / random slowdowns
 
 
 class MikeTest(LiveServerTestCase):
@@ -21,29 +25,50 @@ class MikeTest(LiveServerTestCase):
         self.assertIn(row_text, [row.text for row in rows])
 
 
+    def wait_for_row_in_list_table(self, row_text):
+        start_time = time.time()
+        while True: # we're adding a polling logic to prev. check for row...
+            try:
+                table = self.browser.find_element_by_id('id_list_table')
+                # table = self.browser.find_element_by_id('id_nothing')
+                rows = table.find_elements_by_tag_name('tr')
+                self.assertIn(row_text, [row.text for row in rows])
+                # self.assertIn('foo', [row.text for row in rows])
+                return rows
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+
+
+
     def test_start_a_list_and_retrieve_it_later(self):
         # self.browser.get('http://localhost:8000')
         self.browser.get(self.live_server_url) #from LiveServerTestCase
         self.assertIn('TO-DO', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text # user types into the textbox
         self.assertIn('Your To-Do List', header_text)
-        
+
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(inputbox.get_attribute('placeholder'),'Enter a to-do item:') 
         inputbox.send_keys('Mike will eat a meatball') # enable the user to insert an entry
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # time.sleep(1) # not needed anymore after adding the wait function
 
-        self.check_for_row_in_list_table('1: Mike will eat a meatball')
+        # self.check_for_row_in_list_table('1: Mike will eat a meatball')
+        self.wait_for_row_in_list_table('1: Mike will eat a meatball')
+
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Mike will digest the meatball') # enable the user to insert an entry
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # time.sleep(1) # not needed anymore after adding the wait function
 
         # page updates and reflects content of textbox after entering
-        self.check_for_row_in_list_table('1: Mike will eat a meatball')
-        self.check_for_row_in_list_table('2: Mike will digest the meatball')        
-
+        # self.check_for_row_in_list_table('1: Mike will eat a meatball')
+        # self.check_for_row_in_list_table('2: Mike will digest the meatball')
+        self.wait_for_row_in_list_table('1: Mike will eat a meatball')
+        self.wait_for_row_in_list_table('2: Mike will digest the meatball')               
+        # self.wait_for_row_in_list_table('3: Mike wants another meatball')
         # site should generate a url storing the TO-DO list
         self.fail('Finish the test!')
 
