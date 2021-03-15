@@ -1,9 +1,10 @@
 import unittest
 import time
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class MikeTest(unittest.TestCase):
+class MikeTest(LiveServerTestCase):
 	@classmethod
 	def setUp(self):
 		self.browser = webdriver.Firefox()
@@ -19,11 +20,13 @@ class MikeTest(unittest.TestCase):
 		self.assertIn(row_text, [row.text for row in rows])
 
 	def test_start_a_list_and_retrieve_it_later(self):
-		self.browser.get("http://localhost:8000")
+		# self.browser.get("http://localhost:8000")
+		self.browser.get(self.live_server_url)
+
 		self.assertIn('To-Do', self.browser.title)
-		# header_text = self.browser.find_element_by_tag_name('h1').text
-		# self.assertIn('To-Do', header_text)
-		# self.browser.find_element_by_id('id_new_item')
+		header_text = self.browser.find_element_by_tag_name('h1').text
+		self.assertIn('To-Do', header_text)
+		self.browser.find_element_by_id('id_new_item')
 
 		# Insert entry user story
 		inputbox = self.browser.find_element_by_id('id_new_item')
@@ -33,12 +36,18 @@ class MikeTest(unittest.TestCase):
 		time.sleep(1)
 
 		# update page reflecting text type 
-		self.check_for_row_in_list_table('1: Mike will ear a meatball')
-		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_elements_by_tag_name('tr')
+		self.check_for_row_in_list_table('1: Mike will eat a meatball')
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Mike will digest the meatball')
+		inputbox.send_keys(Keys.ENTER)
+		time.sleep(1)
+		self.check_for_row_in_list_table('1: Mike will eat a meatball')
+		self.check_for_row_in_list_table('2: Mike will digest the meatball')
+		# table = self.browser.find_element_by_id('id_list_table')
+		# rows = table.find_elements_by_tag_name('tr')
 		# self.assertTrue(any(row.text == '1: Mike will eat a meatball.' for row in rows), f"New to-do item did not appear in table. Contents were: \n{table.text}")
-		self.assertIn('1: Mike will eat a meatball', [row.text for row in rows])
-		self.assertIn('2: Mike will digest the meatball', [row.text for row in rows])
+		# self.assertIn('1: Mike will eat a meatball', [row.text for row in rows])
+		# self.assertIn('2: Mike will digest the meatball', [row.text for row in rows])
 
 		# site should generate an url storing the TO-DO list
 		self.fail('Finish the test!')
@@ -75,5 +84,5 @@ class MikeTest(unittest.TestCase):
 # user should visit the url
 # browser.quit()
 
-if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+# if __name__ == '__main__':
+# 	unittest.main(warnings='ignore')
