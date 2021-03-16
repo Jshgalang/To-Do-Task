@@ -1,0 +1,51 @@
+Write a storyline
+weaving yang implemention detail
+
+- maybe diff users dont see each other's list
+- maybe, each user should have their own URL
+
+
+to retrieve what they saved
+TDD + Agile
+TOP DESIGN
+Design then execute
+
+agile philo
+it lies in practice
+more than in theory
+
+MVP
+design philo : agile : "let the design evolve gradually from real world feedback'
+
+
+mindset: progressing increasingly step by step
+des con:
+- each user, stores own list
+(at least 1 list for each user, for now)
+- list is composed of several items
+
+- kailangan msave ito
+ito, meaning lists,
+
+>> later, some way of matically detecting users and showing them their list
+
+YAGNI -> 'You Aren't Gonna Need It'
+
+
+PUT
+hindi magagaamit sa HTM form
+
+
+
+- adjust si model para yung items associated with different lists
+- add unique URLs for each list
+- add a url for creating a new list via POST
+- add URLSs for adding new items to an existing list VIA POST
+
+
+old FT ensures that we dont break where we're at
+new FT directs our new features
+
+
+when you are having problems on the functional test even though you've passed your unit tests
+it might be indicating a template problem
