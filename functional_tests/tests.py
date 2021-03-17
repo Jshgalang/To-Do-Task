@@ -86,7 +86,7 @@ class MikeTest(LiveServerTestCase):
         inputbox.send_keys('Mike will digest the meatball')
         inputbox.send_keys(Keys.ENTER)
         mike_list_url = self.browser.current_url
-
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertRegex(mike_list_url, '/lists/.+') # check that other users don't see mike's list and that they each have unique URLs
         self.assertNotIn('Mike will eat a meatball', page_text)
 
