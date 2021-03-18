@@ -89,6 +89,7 @@ class MikeTest(LiveServerTestCase):
 		# Mike sees his list has a unique URL
 		mike_list_url = self.browser.current_url
 		self.assertRegex(mike_list_url, '/lists/.+')
+		# self.assertRegex(mike_list_url, '/lists/(\d+)')
 
 		'''
 		<assuming we have new users, we check that they dont see mike's list AND that they each have unique URLs>
@@ -113,6 +114,7 @@ class MikeTest(LiveServerTestCase):
 		# Iso gets her own unique URL
 		iso_list_url = self.browser.current_url
 		self.assertRegex(iso_list_url, '/lists/.+')
+		# self.assertRegex(iso_list_url, '/lists/(\d+)')
 		self.assertNotEqual(iso_list_url, mike_list_url)
 
 		# No trace of Mike's list dapat
