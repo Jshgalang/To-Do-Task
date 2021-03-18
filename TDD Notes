@@ -49,3 +49,9 @@ new FT directs our new features
 
 when you are having problems on the functional test even though you've passed your unit tests
 it might be indicating a template problem
+
+
+remember again that
+Views kay Django ay Controllers 
+
+cp lists/templates/home.html lists/templates/list.html
