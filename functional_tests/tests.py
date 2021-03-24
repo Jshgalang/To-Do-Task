@@ -45,7 +45,7 @@ class MikeTest(LiveServerTestCase):
     def test_start_a_list_and_retrieve_it_later(self):  # good for 1 user only
         # self.browser.get('http://localhost:8000')
         self.browser.get(self.live_server_url) #from LiveServerTestCase
-        self.assertIn('TO-DO', self.browser.title)
+        self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text # user types into the textbox
         self.assertIn('Start a new To-Do List', header_text)
 
@@ -75,7 +75,7 @@ class MikeTest(LiveServerTestCase):
 
     def test_add_entry_and_retrieve_later(self):
         self.browser.get(self.live_server_url)
-        self.assertIn('TO-DO', self.browser.title, f'Browser title was {self.browser.title}')
+        self.assertIn('To-Do', self.browser.title, f'Browser title was {self.browser.title}')
         self.fail('Finish the Test')
 
         
@@ -85,9 +85,10 @@ class MikeTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Mike will digest the meatball')
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(2)
         mike_list_url = self.browser.current_url
         page_text = self.browser.find_element_by_tag_name('body').text
-        # self.assertRegex(mike_list_url, '/lists/.+') # check that other users don't see mike's list and that they each have unique URLs
+        self.assertRegex(mike_list_url, '/lists/.+') # check that other users don't see mike's list and that they each have unique URLs
         self.assertNotIn('Mike will eat a meatball', page_text)
 
         """
@@ -108,7 +109,8 @@ class MikeTest(LiveServerTestCase):
 
         self.wait_for_row_in_list_table('1: Buy milk')
         iso_list_url = self.browser.current_url # Iso gets her own unique URL
-        # self.assertRegex(iso_list_url, '/lists/.+') # No trace of Mike's list dapat
+        time.sleep(2)
+        self.assertRegex(iso_list_url, '/lists/.+') # No trace of Mike's list dapat
 
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Mike will eat a meatball', page_text)
