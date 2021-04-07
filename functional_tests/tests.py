@@ -2,7 +2,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-from django.test import LiveServerTestCase
+# from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import WebDriverException
 from unittest import skip
@@ -10,31 +10,14 @@ from unittest import skip
 
 MAX_WAIT = 10 # catch random glitches / random slowdowns
 
-class MikeTest(StaticLiveServerTestCase):
+
+class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
-
 
     def tearDown(self) -> None:
         self.browser.quit()
 
-
-    def test_layout_and_styling(self):
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta = 10)
-
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta = 10)
-
-
-    # helper method
     def check_for_row_in_list_table(self, row_text):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
@@ -56,8 +39,12 @@ class MikeTest(StaticLiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
+# setUp
+# tearDown
+# wait_for_row_in_list_table
 
 
+class MikeTest(FunctionalTest):
     def test_start_a_list_and_retrieve_it_later(self):  # good for 1 user only
         # self.browser.get('http://localhost:8000')
         self.browser.get(self.live_server_url) #from LiveServerTestCase
@@ -83,16 +70,12 @@ class MikeTest(StaticLiveServerTestCase):
         # self.check_for_row_in_list_table('1: Mike will eat a meatball')
         # self.check_for_row_in_list_table('2: Mike will digest the meatball')
         self.wait_for_row_in_list_table('1: Mike will eat a meatball')
-        self.wait_for_row_in_list_table('2: Mike will digest the meatball')               
-        # self.wait_for_row_in_list_table('3: Mike wants another meatball')
-        # site should generate a url storing the TO-DO list
-        self.fail('Finish the test!')
-
-
+        self.wait_for_row_in_list_table('2: Mike will digest the meatball') 
+    # multipleuserscanstartlistsatdiffurls
     def test_add_entry_and_retrieve_later(self):
         self.browser.get(self.live_server_url)
         self.assertIn('To-Do', self.browser.title, f'Browser title was {self.browser.title}')
-        self.fail('Finish the Test')
+        # self.fail('Finish the Test')
 
         
     def test_multiple_users_can_start_lists_at_different_urls(self):
@@ -131,6 +114,25 @@ class MikeTest(StaticLiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Mike will eat a meatball', page_text)
 
+
+class LayoutAndStylingTest(FunctionalTest):
+    # layoutandstyling
+    def test_layout_and_styling(self):
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta = 10)
+
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta = 10)
+
+class ItemValidationTest(FunctionalTest):
+    # cantaddemptylistitems
     @skip
     def test_cannot_add_empty_list_items(self):
         # Mike goes to the home page and accidentally tries to submit
@@ -148,6 +150,8 @@ class MikeTest(StaticLiveServerTestCase):
 
         # Tapos icocorrect nya ulit by filling some text in
         self.fail('Write me!')
+    
+
 
 """
 # browser open
