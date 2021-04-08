@@ -11,6 +11,8 @@ from unittest import skip
 MAX_WAIT = 10 # catch random glitches / random slowdowns
 
 
+
+
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
@@ -34,6 +36,21 @@ class FunctionalTest(StaticLiveServerTestCase):
                 self.assertIn(row_text, [row.text for row in rows])
                 # self.assertIn('foo', [row.text for row in rows])
                 return rows
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+ 
+    def wait_for(self, func):
+        start_time = time.time()
+        while True: # we're adding a polling logic to prev. check for row...
+            try:
+                # table = self.browser.find_element_by_id('id_list_table')
+                # # table = self.browser.find_element_by_id('id_nothing')
+                # rows = table.find_elements_by_tag_name('tr')
+                # self.assertIn(row_text, [row.text for row in rows])
+                # # self.assertIn('foo', [row.text for row in rows])
+                return func()
             except (AssertionError, WebDriverException) as e:
                 if time.time() - start_time > MAX_WAIT:
                     raise e
