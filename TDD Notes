@@ -55,3 +55,11 @@ remember again that
 Views kay Django ay Controllers 
 
 cp lists/templates/home.html lists/templates/list.html
+
+
+
+views do:
+1. pagprocess ng POST request
+2. render form the POST request came from
+
+this is not RESTful
