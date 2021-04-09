@@ -1,44 +1,48 @@
-import unittest
-import time
+# import unittest
+# import time
 # from django.test import LiveServerTestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+# from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
+# from selenium.common.exceptions import WebDriverException
+# from unittest import skip
 
-MAX_WAIT = 10 # catch random glitches/ random slowdowns
+from .base import FunctionalTest
 
-class MikeTest(StaticLiveServerTestCase):
-	@classmethod
-	def setUp(self):
-		self.browser = webdriver.Firefox()
+# MAX_WAIT = 10 # catch random glitches/ random slowdowns
 
-	@classmethod
-	def tearDown(self):
-		self.browser.quit()
 
-	def test_layout_and_styling(self):
-		# Mike goes to homepage
-		self.browser.get(self.live_server_url)
-		self.browser.set_window_size(1024, 768)
-		# Mike sees input box at the center
-		inputbox = self.browser.find_element_by_id('id_new_item')
-		self.assertAlmostEqual(
-			inputbox.location['x'] + inputbox.size['width'] / 2,
-		 	512, 
-		 	delta = 10,
-		 	)
+class MikeTest(FunctionalTest):
+	# @classmethod
+	# def setUp(self):
+	# 	self.browser = webdriver.Firefox()
 
-		# mike starts a new list and sees it's also centered
-		inputbox.send_keys('testing')		
-		inputbox.send_keys(Keys.ENTER)
-		self.wait_for_row_in_list_table('1: testing')
-		inputbox = self.browser.find_element_by_id('id_new_item')
-		self.assertAlmostEqual(
-			inputbox.location['x'] + inputbox.size['width'] / 2,
-		 	512, 
-		 	delta = 10,
-		 	)
+	# @classmethod
+	# def tearDown(self):
+	# 	self.browser.quit()
+
+	# def test_layout_and_styling(self):
+	# 	# Mike goes to homepage
+	# 	self.browser.get(self.live_server_url)
+	# 	self.browser.set_window_size(1024, 768)
+	# 	# Mike sees input box at the center
+	# 	inputbox = self.browser.find_element_by_id('id_new_item')
+	# 	self.assertAlmostEqual(
+	# 		inputbox.location['x'] + inputbox.size['width'] / 2,
+	# 	 	512, 
+	# 	 	delta = 10,
+	# 	 	)
+
+	# 	# mike starts a new list and sees it's also centered
+	# 	inputbox.send_keys('testing')		
+	# 	inputbox.send_keys(Keys.ENTER)
+	# 	self.wait_for_row_in_list_table('1: testing')
+	# 	inputbox = self.browser.find_element_by_id('id_new_item')
+	# 	self.assertAlmostEqual(
+	# 		inputbox.location['x'] + inputbox.size['width'] / 2,
+	# 	 	512, 
+	# 	 	delta = 10,
+	# 	 	)
 
 	# helper method
 	# def check_for_row_in_list_table(self, row_text):
@@ -47,22 +51,22 @@ class MikeTest(StaticLiveServerTestCase):
 	# 	self.assertIn(row_text, [row.text for row in rows])
 
 	# renaming
-	def wait_for_row_in_list_table(self, row_text):
-		start_time = time.time()
-		while True:  # we're adding a polling logic to prev. check_for_row...
-			try:
-				table = self.browser.find_element_by_id('id_list_table')
-				# table = self.browser.find_element_by_id('id_nothing')
-				rows = table.find_elements_by_tag_name('tr')
-				self.assertIn(row_text, [row.text for row in rows])
-				# self.assertIn('foo', [row.text for row in rows])
-				return
-			except (AssertionError, WebDriverException) as e:
-			# AssertionError when the row asserted is still missing
-			# WebdriverException if page is not loaded and selenium element is not loaded
-				if time.time() - start_time > MAX_WAIT:
-					raise e
-				time.sleep(0.5)
+	# def wait_for_row_in_list_table(self, row_text):
+	# 	start_time = time.time()
+	# 	while True:  # we're adding a polling logic to prev. check_for_row...
+	# 		try:
+	# 			table = self.browser.find_element_by_id('id_list_table')
+	# 			# table = self.browser.find_element_by_id('id_nothing')
+	# 			rows = table.find_elements_by_tag_name('tr')
+	# 			self.assertIn(row_text, [row.text for row in rows])
+	# 			# self.assertIn('foo', [row.text for row in rows])
+	# 			return
+	# 		except (AssertionError, WebDriverException) as e:
+	# 		# AssertionError when the row asserted is still missing
+	# 		# WebdriverException if page is not loaded and selenium element is not loaded
+	# 			if time.time() - start_time > MAX_WAIT:
+	# 				raise e
+	# 			time.sleep(0.5)
 
 	def test_start_a_list_and_retrieve_it_later(self):  # good for 1 user only
 		# self.browser.get("http://localhost:8000")
@@ -146,11 +150,11 @@ class MikeTest(StaticLiveServerTestCase):
 		self.assertIn('Buy milk', page_text)
 
 
-	def test_addentry_and_retrievelater(self):  #  main func
-		self.browser.get("http://localhost:8000")  # homepage checkout
+	# def test_addentry_and_retrievelater(self):  #  main func
+	# 	self.browser.get("http://localhost:8000")  # homepage checkout
 
-		self.assertIn('To-Do', self.browser.title) # what the user sees upon loading the homepage
-		self.fail('Finish the test.')
+	# 	self.assertIn('To-Do', self.browser.title) # what the user sees upon loading the homepage
+	# 	self.fail('Finish the test.')
 
 		# enable the user to insert an entry
 
@@ -161,22 +165,3 @@ class MikeTest(StaticLiveServerTestCase):
 
 		# user should visit the url
 		# browser.quit()
-
-#  Accessing
-# browser = webdriver.Firefox()
-# browser.get("http://localhost:8000")
-
-# assert 'TO-DO' in browser.title, 'Browser title was ' + browser.title #  First thing the user will see
-
-# enable the user to insert an entry
-
-# user types item to the text box
-# update page reflecting text type
-# continuous entry
-# site should generate an url storing the TO-DO list
-
-# user should visit the url
-# browser.quit()
-
-# if __name__ == '__main__':
-# 	unittest.main(warnings='ignore')
