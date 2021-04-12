@@ -63,3 +63,6 @@ views do:
 2. render form the POST request came from
 
 this is not RESTful
+
+
+remove duplication of validation loogic in views.py
