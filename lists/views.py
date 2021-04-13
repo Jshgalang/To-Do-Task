@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
+from lists.forms import ItemForm
 from lists.models import Item, List
 # from django.http import HttpResponse
 
@@ -32,7 +33,7 @@ def home_page(request):
 	
 	# items = Item.objects.all()
 	# return render(request, 'home.html', {'items': items})
-	return render(request, 'home.html')
+	return render(request, 'home.html', {'form': ItemForm()})
 
 # list controller
 def view_list(request, foo):
