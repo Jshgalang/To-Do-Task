@@ -1,5 +1,5 @@
 # import unittest
-# from selenium import webdriver
+from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 # from django.test import LiveServerTestCase
@@ -50,14 +50,13 @@ class MikeTest(FunctionalTest):
         # Mike starts a new to do list
         self.browser.get(self.live_server_url)
         inputbox = self.browser.find_element_by_id('id_new_item')
-        inputbox.send_keys('Mike will digest the meatball')
+        inputbox.send_keys('Mike will eat a meatball')
         inputbox.send_keys(Keys.ENTER)
-        #time.sleep(2)
+        self.wait_for_row_in_list_table('1: Mike will eat a meatball')
+        # wait
         mike_list_url = self.browser.current_url
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertRegex(mike_list_url, '/lists/.+') # check that other users don't see mike's list and that they each have unique URLs
-        self.assertNotIn('Mike will eat a meatball', page_text)
-
         """
         assuming we have new users, we check that they dont see mike's list AND that they each have unique URLs
 
@@ -65,6 +64,7 @@ class MikeTest(FunctionalTest):
 
         self.browser.quit() # new browser session
         self.browser = webdriver.Firefox()
+
         # Iso visits home page. No sign of Mike's list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
@@ -76,8 +76,6 @@ class MikeTest(FunctionalTest):
 
         self.wait_for_row_in_list_table('1: Buy milk')
         iso_list_url = self.browser.current_url # Iso gets her own unique URL
-        time.sleep(2)
         self.assertRegex(iso_list_url, '/lists/.+') # No trace of Mike's list dapat
-
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Mike will eat a meatball', page_text)
