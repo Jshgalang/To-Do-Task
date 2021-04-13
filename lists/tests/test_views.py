@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 # from lists.models import Item
 from lists.models import Item, List
 from django.utils.html import escape
-
+from lists.forms import ItemForm
 
 class HomePageTest(TestCase):
 	def test_root_url_resolution_to_home_page_view(self):
@@ -28,6 +28,11 @@ class HomePageTest(TestCase):
 		response = self.client.get('/')
 		self.assertTemplateUsed(response, 'home.html')
 
+
+	def test_uses_item_form(self):
+		response = self.client.get('/')
+		# form = ItemForm()
+		self.assertIsInstance(response.context['form'], ItemForm)
 	# def test_can_save_a_POST_request(self):
 	# 	self.client.post('/', data={'item_text': 'A new list item'}) # form data to send
 
