@@ -49,7 +49,7 @@ class MikeTest(FunctionalTest):
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # Mike starts a new to do list
         self.browser.get(self.live_server_url)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_inputbox()
         inputbox.send_keys('Mike will eat a meatball')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Mike will eat a meatball')
@@ -70,7 +70,7 @@ class MikeTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Mike will eat a meatball', page_text)
 
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_inputbox()
         inputbox.send_keys('Buy milk') 
         inputbox.send_keys(Keys.ENTER)
 
