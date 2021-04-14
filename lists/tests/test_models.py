@@ -48,6 +48,10 @@ class ListAndItemModelsTest(TestCase):
 			item.save()
 			item.full_clean()
 
+	def test_get_absolute_url(self):
+		list_ = List.objects.create()
+		self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
+
 # class HomePageTest(TestCase):
 # 	def test_root_url_resolution_to_home_page_view(self):
 # 		found = resolve('/')
