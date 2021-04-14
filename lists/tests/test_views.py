@@ -200,7 +200,6 @@ class ListViewTest(TestCase):
 	def test_for_invalid_input_shows_error_on_page(self):
 		response = self.post_invalid_input()
 		self.assertContains(response, escape(EMPTY_ITEM_ERROR))
->>>>>>> e6da5590c9bb25416ad822b4dbfb8dbe6fc3e826:lists/tests/test_views.py
 
 
 class NewListTest(TestCase):
