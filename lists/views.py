@@ -42,7 +42,8 @@ def view_list(request, foo):
 	error = None
 	if request.method == 'POST':
 		try:
-			item = Item(text=request.POST['item_text'], list=list_)
+			# item = Item(text=request.POST['item_text'], list=list_)
+			item = Item(text=request.POST['text'], list=list_)
 			item.full_clean()
 			item.save()
 			# return redirect(f'/lists/{list_.id}/')
@@ -57,7 +58,8 @@ def view_list(request, foo):
 
 def new_list(request):
 	list_ = List.objects.create()
-	item = Item.objects.create(text=request.POST['item_text'], list=list_)
+	# item = Item.objects.create(text=request.POST['item_text'], list=list_)
+	item = Item.objects.create(text=request.POST['text'], list=list_)
 	# item.full_clean()
 	try:
 		item.full_clean()
