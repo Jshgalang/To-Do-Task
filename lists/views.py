@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ValidationError
+from lists.forms import ItemForm
 from lists.models import Item, List
 # from django.http import HttpResponse
 
@@ -31,20 +33,44 @@ def home_page(request):
 	
 	# items = Item.objects.all()
 	# return render(request, 'home.html', {'items': items})
-	return render(request, 'home.html')
+	return render(request, 'home.html', {'form': ItemForm()})
 
 # list controller
 def view_list(request, foo):
 	# items = Item.objects.all()
 	list_ = List.objects.get(id=foo)
-	return render(request, 'list.html', {'list': list_})
+	error = None
+	if request.method == 'POST':
+		try:
+			item = Item(text=request.POST['item_text'], list=list_)
+			item.full_clean()
+			item.save()
+			# return redirect(f'/lists/{list_.id}/')
+			return redirect(list_)
+		except ValidationError:
+			error = "You can't have an empty list item"
+			# return render(request, 'list.html', {'list': list_,'error': error})
+	return render(request, 'list.html', {'list': list_,'error': error})
+		# Item.objects.create(text=request.POST['item_text'], list=list_)
+		# return redirect(f'/lists/{list_.id}/')
+	# return render(request, 'list.html', {'list': list_})
 
 def new_list(request):
 	list_ = List.objects.create()
-	Item.objects.create(text=request.POST['item_text'], list=list_)
-	return redirect(f'/lists/{list_.id}/')
+	item = Item.objects.create(text=request.POST['item_text'], list=list_)
+	# item.full_clean()
+	try:
+		item.full_clean()
+		item.save()
+	except ValidationError:
+		list_.delete()
+		error = "You can't have an empty list item" 
+		return render(request, 'home.html', {"error": error})
+	# return redirect(f'/lists/{list_.id}/')
+	# return redirect('view_list', list_.id)
+	return redirect(list_)
 
-def add_item(request, foo):
-	list_ = List.objects.get(id=foo)
-	Item.objects.create(text=request.POST['item_text'], list=list_)
-	return redirect(f'/lists/{list_.id}/')
+# def add_item(request, foo):
+# 	list_ = List.objects.get(id=foo)
+# 	Item.objects.create(text=request.POST['item_text'], list=list_)
+# 	return redirect(f'/lists/{list_.id}/')
