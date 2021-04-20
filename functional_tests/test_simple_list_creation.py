@@ -75,10 +75,12 @@ class MikeTest(FunctionalTest):
 		self.assertIn('To-Do', self.browser.title)
 		header_text = self.browser.find_element_by_tag_name('h1').text
 		self.assertIn('To-Do', header_text)
-		self.browser.find_element_by_id('id_new_item')
+		# self.browser.find_element_by_id('id_new_item')
+		self.get_item_input_box()
 
 		# Insert entry user story
-		inputbox = self.browser.find_element_by_id('id_new_item')
+		# inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.get_item_input_box()
 		# self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a To-Do item.')
 		inputbox.send_keys('Mike will eat a meatball')
 		inputbox.send_keys(Keys.ENTER)
@@ -88,7 +90,8 @@ class MikeTest(FunctionalTest):
 		# self.check_for_row_in_list_table('1: Mike will eat a meatball')
 		self.wait_for_row_in_list_table('1: Mike will eat a meatball')
 
-		inputbox = self.browser.find_element_by_id('id_new_item')
+		# inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.get_item_input_box()
 		inputbox.send_keys('Mike will digest the meatball')
 		inputbox.send_keys(Keys.ENTER)
 		# time.sleep(1)
@@ -110,7 +113,8 @@ class MikeTest(FunctionalTest):
 	def test_multiple_users_can_start_lists_at_different_urls(self):  
 		# Mike starts a new to-do list
 		self.browser.get(self.live_server_url)
-		inputbox = self.browser.find_element_by_id('id_new_item')
+		# inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.get_item_input_box()
 		inputbox.send_keys('Mike will eat a meatball')
 		inputbox.send_keys(Keys.ENTER)
 		self.wait_for_row_in_list_table('1: Mike will eat a meatball')
@@ -134,7 +138,8 @@ class MikeTest(FunctionalTest):
 		self.assertNotIn('Mike will digest the meatball', page_text)
 
 		# Iso starts a new list by adding a new item
-		inputbox = self.browser.find_element_by_id('id_new_item')
+		# inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.get_item_input_box()
 		inputbox.send_keys('Buy milk')
 		inputbox.send_keys(Keys.ENTER)
 		self.wait_for_row_in_list_table('1: Buy milk')
