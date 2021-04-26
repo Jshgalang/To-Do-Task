@@ -2,3 +2,11 @@
 #id_text {
 margin-top: 2ex;
 }
+
+body {
+  background-image: url('/static/img/asd.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  position: relative;
+}
